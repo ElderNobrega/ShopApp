@@ -22,3 +22,13 @@
   margin: 0;
 }
 
+.btn {
+  border-color: red;
+  color: red;
+}
+
+.btn:hover {
+  background-color: red;
+  color: white,
+}
+
