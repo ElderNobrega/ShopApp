@@ -2,15 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
+// const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error')
-const sequelize = require('./util/database')
-const Product = require('./models/product')
-const User = require('./models/user')
-const Cart = require('./models/cart')
-const CartItem = require('./models/cartItem')
-const Order = require('./models/order')
-const OrderItem = require('./models/orderItem')
+const mongoConnect = require('./util/database').mongoConnect
+
+
+
 
 
 const app = express();
@@ -24,21 +21,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use((req, res, next) => {
-    User.findByPk(1)
-        .then(user => {
-            req.user = user
-            next()
-        })
-        .catch(err => console.log('error: ', err))
+    // User.findByPk(1)
+    //     .then(user => {
+    //         req.user = user
+    //         next()
+    //     })
+    //     .catch(err => console.log('error: ', err))
+    next()
 })
 
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
-
+// app.use(shopRoutes);
 app.use(errorController.get404);
 
+mongoConnect(() => {
+    app.listen(3000);
+})
 
-Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
+
+
+//Sequelize code
+/* const sequelize = require('./util/database')
+const Product = require('./models/product')
+const User = require('./models/user')
+const Cart = require('./models/cart')
+const CartItem = require('./models/cartItem')
+const Order = require('./models/order')
+const OrderItem = require('./models/orderItem') */
+
+/* Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
 User.hasMany(Product)
 User.hasOne(Cart)
 Cart.belongsTo(User)
@@ -68,11 +79,7 @@ sequelize.sync()
       })
     .catch(err => {
         // console.log('error: ', err)
-})
-
-app.listen(3000);
-
-
+}) */
 
 
 //mySQL db

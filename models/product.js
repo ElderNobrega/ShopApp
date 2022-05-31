@@ -1,7 +1,30 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../util/database')
+const getDb = require('../util/database').getDb
 
-const Product = sequelize.define('product', {
+class Product {
+    constructor(id, title, imageUrl, description, price) {
+        this.id = id;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.price = price;
+    }
+
+    save() {
+        const db = getDb()
+        db.collection('products').insertOne(this)
+            .then(result => {
+                console.log(result)
+            })
+            .catch(err => console.log('error: ', err))
+    }
+}
+
+
+module.exports = Product
+
+
+
+/* const Product = sequelize.define('product', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -21,9 +44,12 @@ const Product = sequelize.define('product', {
         type: Sequelize.STRING,
         allowNull: false
     }
-})
+}) */
 
-module.exports = Product
+
+//Sequelize code
+/* const Sequelize = require('sequelize')
+const sequelize = require('../util/database') */
 
 // MySql 
 /* const Cart = require('./cart')
