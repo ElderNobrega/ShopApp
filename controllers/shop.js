@@ -53,19 +53,15 @@ exports.getIndex = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
     req.user.getCart()
-        .then(cart => {
-            return cart.getProducts()
-                .then(products => {
-                    res.render('shop/cart', {
-                        pageTitle: 'Your Cart', 
-                        path: '/cart',
-                        products: products
-                    }) 
-                })
-                .catch(err => {console.log('error: ', err)})
+        .then(products => {
+            res.render('shop/cart', {
+                pageTitle: 'Your Cart', 
+                path: '/cart',
+                products: products
+            }) 
         })
         .catch(err => {console.log('error: ', err)})
-
+}
     /* Cart.getCart(cart => {
         Product.fetchAll(products => {
             const cartProducts = []
@@ -82,7 +78,6 @@ exports.getCart = (req, res, next) => {
             })
         })
     }) */
-}
 
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId
@@ -90,7 +85,7 @@ exports.postCart = (req, res, next) => {
         .then(product => {
             return req.user.addToCart(product)
         })
-        .then(result => console.log('postCart: ', result))
+        .then(result => res.redirect('/cart'))
         .catch(err => console.log('error', err))
 
     //sequelize code
