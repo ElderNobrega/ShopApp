@@ -1,4 +1,7 @@
-const Sequelize = require('sequelize');
+
+
+// Sequelize code
+/* const Sequelize = require('sequelize');
 const sequelize = require('../util/database');
 
 const CartItem = sequelize.define('cartItem', {
@@ -11,4 +14,4 @@ const CartItem = sequelize.define('cartItem', {
     quantity: Sequelize.INTEGER
 })
 
-module.exports = CartItem
+module.exports = CartItem */
