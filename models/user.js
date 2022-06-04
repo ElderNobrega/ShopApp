@@ -19,10 +19,20 @@ class User {
     }
 
     addToCart(product) {
-        // const cartProduct = this.cart.items.findIndex(cartProd => cartProd._id === product._id)
-        const updatedCart = { items: [{ ...product, quantity: 1}]}
+        const cartProductIndex = this.cart.items.findIndex(cartProd => cartProd.productId.toString() === product._id.toString())
+        let newQuanity = 1
+        const updatedCartItems = [...this.cart.items]
+
+        if (cartProductIndex >= 0) {
+            newQuanity = this.cart.items[cartProductIndex].quantity + 1
+            updatedCartItems[cartProductIndex].quantity = newQuanity
+        } else {
+            updatedCartItems.push({ productId: new ObjectId(product._id), quantity: newQuanity })
+        }
+        
+        const updatedCart = { items: updatedCartItems }
         const db = getDb()
-        return db.collection('users').updateOne( { _id: new ObjectId(this._id) }, { set: { cart: updatedCart }})
+        return db.collection('users').updateOne( { _id: new ObjectId(this._id) }, { $set: { cart: updatedCart }})
     }
 
     static findById(userId) {

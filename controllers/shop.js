@@ -86,7 +86,15 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId
-    let fetchedCart;
+    Product.findById(prodId)
+        .then(product => {
+            return req.user.addToCart(product)
+        })
+        .then(result => console.log('postCart: ', result))
+        .catch(err => console.log('error', err))
+
+    //sequelize code
+    /* let fetchedCart;
     let newQuantity = 1
     req.user.getCart()
         .then(cart => {
@@ -111,7 +119,7 @@ exports.postCart = (req, res, next) => {
         .then(() => {
             res.redirect('/cart')
         })
-        .catch(err => console.log('error: ', err))
+        .catch(err => console.log('error: ', err)) */
     /* const prodId = req.body.productId
     Product.findById(prodId, product => {
         Cart.addProduct(prodId, product.price)
