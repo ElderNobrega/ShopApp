@@ -1,4 +1,5 @@
-
+//Not using it anymore..
+//Keeping it for future reference.
 
 // Sequelize code
 /* const Sequelize = require('sequelize');
