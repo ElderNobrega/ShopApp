@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const loginRoutes = require('./routes/auth')
 const errorController = require('./controllers/error')
 const dbConectionString = require('./util/database').dbConectionString
 const mongoose = require('mongoose')
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(loginRoutes);
 app.use(errorController.get404);
 
 mongoose.connect(dbConectionString)
