@@ -25,14 +25,22 @@ app.set('views', 'views');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session({ 
-        secret: 'my secrete', resave: false, saveUninitialized: false, store: store
+        secret: 'my secrete', 
+        resave: false, 
+        saveUninitialized: false, 
+        store: store
     })
 )
 
+// req.user = new User().init(req.user);
 app.use((req, res, next) => {
-    User.findById('629fce142321018f9c1327bd')
+    if (!req.session.user) {
+        return next()
+    }
+    User.findById(req.session.user._id)
         .then(user => {
-            req.user = user
+            console.log('TestApp: ',user)
+            req.user = user;
             next()
         })
         .catch(err => console.log('err: ', err))
