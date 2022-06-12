@@ -3,16 +3,30 @@ const User = require('../models/user')
 
 exports.getLogin = (req, res, next) => {
     // const isLoggedIn = req.get('Cookie').trim().split('=')[1]
+    let message = req.flash('error')
+    if (message.length > 0) {
+        message = message[0]
+    } else {
+        message = null
+    }
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/login',
+        errorMessage: message
     })
 }
 
 exports.getSignup = (req, res, next) => {
+    let message = req.flash('error')
+    if (message.length > 0) {
+        message = message[0]
+    } else {
+        message = null
+    }
     res.render('auth/signup', {
         path: '/signup',
         pageTitle: 'Signup',
+        errorMessage: message
     })
 }
 
@@ -22,6 +36,7 @@ exports.postLogin = (req, res, next) => {
     User.findOne({ email: email})
         .then(user => {
             if (!user) {
+                req.flash('error', 'Invalid email and/or password.')
                 return res.redirect('/login')
             }
             bcrypt.compare(password, user.password)
@@ -34,6 +49,7 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/')
                         })
                     }
+                    req.flash('error', 'Invalid email and/or password.')
                     res.redirect('/login')
                 })
                 .catch(err => {
@@ -50,6 +66,7 @@ exports.postSignup = (req, res, next) => {
     User.findOne({email: email})
         .then(userDoc => {
             if (userDoc) {
+                req.flash('error', 'Email already exist, please enter another email')
                 return res.redirect('/signup')
             }
             return bcrypt.hash(password, 12)
