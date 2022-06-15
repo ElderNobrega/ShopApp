@@ -10,8 +10,8 @@ router.get('/login', auth.getLogin)
 router.get('/signup', auth.getSignup)
 
 router.post('/login', [
-    body('email').isEmail().withMessage('Please enter a valid email address'),
-    body('password', 'That is not a valid password').isLength({min: 5}).isAlphanumeric()
+    body('email').isEmail().withMessage('Please enter a valid email address').normalizeEmail(),
+    body('password', 'That is not a valid password').isLength({min: 5}).isAlphanumeric().trim()
 ], auth.postLogin)
 
 router.post('/signup', [
@@ -27,9 +27,9 @@ router.post('/signup', [
                 //     throw new Error('This email address is forbiden! =)')
                 // }
                 // return true
-            }),
-        body('password', 'Password must be numbers and text and at least 5 characters').isLength({min: 5}).isAlphanumeric(),
-        body('confirmPassword').custom((value, {req}) => {
+            }).normalizeEmail(),
+        body('password', 'Password must be numbers and text and at least 5 characters').isLength({min: 5}).isAlphanumeric().trim(),
+        body('confirmPassword').trim().custom((value, {req}) => {
             if (value !== req.body.password) {
                 throw new Error('Password does not match!')
             }
