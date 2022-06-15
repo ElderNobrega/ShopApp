@@ -9,7 +9,10 @@ router.get('/login', auth.getLogin)
 
 router.get('/signup', auth.getSignup)
 
-router.post('/login', auth.postLogin)
+router.post('/login', [
+    body('email').isEmail().withMessage('Please enter a valid email address'),
+    body('password', 'That is not a valid password').isLength({min: 5}).isAlphanumeric()
+], auth.postLogin)
 
 router.post('/signup', [
         check('email').isEmail().withMessage('Please enter a valid email')
