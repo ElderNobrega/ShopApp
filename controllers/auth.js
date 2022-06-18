@@ -82,7 +82,11 @@ exports.postLogin = (req, res, next) => {
                     console.log('postLoginDoMatch: ', err)
                 })
         })
-        .catch(err => console.log('err: ', err))
+        .catch(err => {
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
+        })
 }
 
 exports.postSignup = (req, res, next) => {
@@ -112,7 +116,9 @@ exports.postSignup = (req, res, next) => {
             res.redirect('/login')
         })
         .catch(err => {
-            console.log('postSignup: ', err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -159,7 +165,9 @@ exports.postReset = (req, res, next) => {
                 res.redirect('/reset')
             })
             .catch(err => {
-                console.log('postReset: ', err)
+                const error = new Error(err)
+                error.httpStatusCode = 500
+                return next(error)
             })
     })
 }
@@ -183,7 +191,9 @@ exports.getNewPassword = (req, res, next) => {
             })
         })
         .catch(err => {
-            console.log('getNewPassword: ', err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
 
@@ -211,6 +221,8 @@ exports.postNewPassword = (req, res, next) => {
             res.redirect('/login')
         })
         .catch(err => {
-            console.log('postNewPassowrd: ', err)
+            const error = new Error(err)
+            error.httpStatusCode = 500
+            return next(error)
         })
 }
